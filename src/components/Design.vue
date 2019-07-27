@@ -10,18 +10,28 @@
           id="txt-input"
           aria-describedby="text-input"
           placeholder="Enter Text"
+          v-model="txtinput"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Translate</button>
+      <button type="submit" class="btn btn-primary" >Translate</button>
     </form>
     <div class="spinner-border" role="status">
       <span class="sr-only">Loading...</span>
     </div>
     <div>
-      <ul id="txt_translation">Translation Area</ul>
+      <ul id="txt_translation">{{txt_output}}</ul>
     </div>
   </div>
 </template>
+<script>
+export default {
+  props:{
+    txtinput: String,
+    txt_output: String,
+    translate: Function
+  }
+}
+</script>
 <style>
 .text-input {
   width: 20%;
