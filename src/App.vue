@@ -1,14 +1,15 @@
 <template>
   <div id="app">
     <Header />
-    v-if="txtoutput !== ''"
-    <Design :txtinput="txtinput" :txt_output="txtoutput"/>
+    <Design :txt_input="txtinput" :txt_output="txtoutput" :select_from="selectfrom" :select_to="selectto" v-on:fetch="updateval($event)"
+    v-on:sel_from="from($event)" v-on:sel_to="to($event)"/>
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Design from './components/Design.vue'
+import axios from "axios";
 
 export default {
   name: 'app',
@@ -19,23 +20,49 @@ export default {
   data() {
     return {
       txtinput: "",
-      txtoutput: ""
+      txtoutput: "Translated Text Place",
+      selectfrom:"en",
+      selectto: "fa"
     }
-  },methods: {
-    translate(){
-      
+  },methods:{
+    from(val){
+      this.selectfrom = val;
+      axios.get(
+        "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190722T062110Z.5f5465fc8ae5efb9.4218583f102455773fa9f2e8146c8928e25a37f6&lang=" 
+        + this.selectfrom + "-" + this.selectto + "&text=" + this.txtinput)
+        .then(response => {
+          if(this.txtinput === "")
+          {
+            this.txtoutput = "Translated Text Place"
+          }
+          this.txtoutput = response.data.text[0];
+        });
+    },to(val){
+      this.selectto = val;
+      axios.get(
+        "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190722T062110Z.5f5465fc8ae5efb9.4218583f102455773fa9f2e8146c8928e25a37f6&lang=" 
+        + this.selectfrom + "-" + this.selectto + "&text=" + this.txtinput)
+        .then(response => {
+          if(this.txtinput === "")
+          {
+            this.txtoutput = "Translated Text Place"
+          }
+          this.txtoutput = response.data.text[0];
+        });
+    },
+    updateval(val){
+      this.txtinput = val;
+      axios.get(
+        "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190722T062110Z.5f5465fc8ae5efb9.4218583f102455773fa9f2e8146c8928e25a37f6&lang=" 
+        + this.selectfrom + "-" + this.selectto + "&text=" + this.txtinput)
+        .then(response => {
+          if(this.txtinput === "")
+          {
+            this.txtoutput = "Translated Text Place"
+          }
+          this.txtoutput = response.data.text[0];
+        });
     }
-  },
-  mounted: function(){
-    fetch("https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190722T062110Z.5f5465fc8ae5efb9.4218583f102455773fa9f2e8146c8928e25a37f6&lang=en-fa&text=hello", {
-      method:"get"
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((jsonData) => {
-      this.txtoutput = jsonData.text[0];
-    })
   }
 }
 </script>
