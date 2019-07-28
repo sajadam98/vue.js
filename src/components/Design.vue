@@ -19,19 +19,9 @@
     </div>
     <form style="margin-top: 30px;margin-bottom: 40px">
       <h style="display: inline">From :</h>
-      <select id="select_from" style="display: inline" @change="onChange($event)">
-        <option value="en" selected="selected">en</option>
-        <option value="fa">fa</option>
-        <option value="ar">ar</option>
-        <option value="fr">fr</option>
-      </select>
+      <b-form-select v-model="selected_from" @change="onChange()" :options="options_from"></b-form-select>
       <h style="display: inline;margin-left: 30px">To :</h>
-      <select id="select_to" @change="onChange2($event)">
-        <option value="en">en</option>
-        <option value="fa" selected="selected">fa</option>
-        <option value="ar">ar</option>
-        <option value="fr">fr</option>
-      </select>
+      <b-form-select v-model="selected_to" @change="onChange2()" :options="options_to"></b-form-select>
     </form>
     <!-- <div class="spinner-border" role="status">
       <span class="sr-only">Loading...</span>
@@ -42,12 +32,34 @@
       </ul>
     </div>
     <div>
-      <ul style="font-size:9px;margin-top:30px">Design By HajSajad<br><b>Derak</b></ul>
+      <ul style="font-size:9px;margin-top:30px">
+        Design By HajSajad
+        <br />
+        <b>Derak</b>
+      </ul>
     </div>
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      selected_from: "en",
+      selected_to: "fa",
+      options_from: [
+        { value: "en", text: "en" },
+        { value: "fa", text: "fa" },
+        { value: "ar", text: "ar" },
+        { value: "fr", text: "fr" }
+      ],
+      options_to: [
+        { value: "en", text: "en" },
+        { value: "fa", text: "fa" },
+        { value: "ar", text: "ar" },
+        { value: "fr", text: "fr"}
+      ]
+    };
+  },
   props: {
     txt_input: String,
     txt_output: String,
@@ -61,23 +73,18 @@ export default {
   // },
   watch: {
     txt_input: function() {
-
-      
-        
-
       if (this.txt_input.length < 1) {
-
         this.$emit("fetch", "Translation");
       }
       this.$emit("fetch", this.txt_input);
     }
   },
   methods: {
-    onChange(event) {
-      this.$emit("sel_from" , event.target.value);
+    onChange() {
+      this.$emit("sel_from", this.selected_from);
     },
-    onChange2(event) {
-      this.$emit("sel_to" , event.target.value);
+    onChange2() {
+      this.$emit("sel_to", this.selected_to);
     }
   }
 };
